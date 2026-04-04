@@ -2,6 +2,7 @@
 
 import { format } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
+import type { DateRange } from "react-day-picker"
 
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
@@ -18,8 +19,8 @@ export function DateRangePicker({
   onChange,
 }: {
   className?: string
-  value?: { from?: Date; to?: Date } | null
-  onChange?: (date: { from?: Date; to?: Date } | undefined) => void
+  value?: DateRange | null
+  onChange?: (date: DateRange | undefined) => void
 }) {
   return (
     <div className={cn("grid gap-2", className)}>

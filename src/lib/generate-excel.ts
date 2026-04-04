@@ -15,8 +15,8 @@ export interface DTRDayData {
 
 export interface DTRFormData {
   name: string;
-  leftPeriod: { from?: Date; to?: Date } | null;
-  rightPeriod: { from?: Date; to?: Date } | null;
+  leftPeriod: { from: Date | undefined; to?: Date | undefined } | null;
+  rightPeriod: { from: Date | undefined; to?: Date | undefined } | null;
   officialHours: string;
   regularDaysHours: string;
   saturdaysHours: string;
@@ -35,13 +35,7 @@ function formatTimeTo12h(time24: string): string {
   return `${hours12}:${minutes} ${period}`;
 }
 
-// Standard thin border for table cells
-const thinBorder: Partial<ExcelJS.Borders> = {
-  top: { style: "thin" },
-  left: { style: "thin" },
-  right: { style: "thin" },
-  bottom: { style: "thin" },
-};
+
 
 
 /**

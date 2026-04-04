@@ -1,6 +1,6 @@
-import React, { useMemo, useEffect, useRef, useState } from "react";
+import React, { useMemo, useEffect, useState } from "react";
 import { useForm, useFieldArray, Controller } from "react-hook-form";
-import { format, isWeekend, getMonth, getYear, eachDayOfInterval } from "date-fns";
+import { format, isWeekend, eachDayOfInterval } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
@@ -79,7 +79,6 @@ const getInitialFormValues = (): DTRFormData => {
 
 
 export default function App() {
-  const currentMonthDate = new Date();
 
   // ── Dark Mode ──
   const [isDark, setIsDark] = useState(() => {
