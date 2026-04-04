@@ -624,7 +624,7 @@ export default function App() {
       </div>
 
       {/* Floating Buttons */}
-      <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-5 gap-3 pointer-events-none">
+      <div className="fixed bottom-0 left-0 right-0 z-50 flex justify-center pb-5 gap-2 md:gap-3 pointer-events-none px-2">
         <AlertDialog open={emptyWarnOpen} onOpenChange={setEmptyWarnOpen}>
           <AlertDialogContent className="pointer-events-auto">
             <AlertDialogHeader>
@@ -644,9 +644,9 @@ export default function App() {
           <AlertDialogTrigger asChild>
             <Button
               variant="outline"
-              className="pointer-events-auto h-12 px-6 font-semibold shadow-lg text-red-600 hover:text-red-500 hover:shadow-xl backdrop-blur-sm transition-all rounded-full cursor-pointer"
+              className="pointer-events-auto h-10 px-4 md:h-12 md:px-6 text-sm md:text-base font-semibold shadow-lg text-red-600 hover:text-red-500 hover:shadow-xl backdrop-blur-sm transition-all rounded-full cursor-pointer"
             >
-              <RotateCcw className="w-5 h-5 mr-2" />
+              <RotateCcw className="w-4 h-4 mr-1.5 md:w-5 md:h-5 md:mr-2" />
               Reset Data
             </Button>
           </AlertDialogTrigger>
@@ -666,9 +666,9 @@ export default function App() {
 
         <Button
           onClick={handleSubmit(onSubmit, onFormError)}
-          className="pointer-events-auto h-12 px-8 font-semibold bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-lg hover:shadow-xl transition-all rounded-full text-base border border-blue-500/30 dark:border-blue-600/30 cursor-pointer"
+          className="pointer-events-auto h-10 px-5 md:h-12 md:px-8 font-semibold bg-blue-600 hover:bg-blue-700 dark:bg-blue-700 dark:hover:bg-blue-600 text-white shadow-lg hover:shadow-xl transition-all rounded-full text-sm md:text-base border border-blue-500/30 dark:border-blue-600/30 cursor-pointer"
         >
-          <FileDown className="w-5 h-5 mr-2" />
+          <FileDown className="w-4 h-4 mr-1.5 md:w-5 md:h-5 md:mr-2" />
           Generate Excel
         </Button>
       </div>
