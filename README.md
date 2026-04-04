@@ -1,73 +1,70 @@
-# React + TypeScript + Vite
+# DTR Generator for Maclang Hospital
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, dynamic web application designed to encode Daily Time Records (DTR) and generate perfectly formatted Excel reports matching the **Civil Service Form No. 48** standard. Built specifically for the needs of Maclang Hospital.
 
-Currently, two official plugins are available:
+## ✨ Key Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+- **Dynamic Attendance Encoding:** An intuitive and modern interface for inputting daily time-in and time-out data, complete with real-time form validation and visual error states.
+- **Automated Excel Export:** Instantly generate DTR records in an Excel format that mirrors Civil Service Form No. 48. The export utilizes a professional gray/white background theme with strict legal paper sizing and specific cell borders.
+- **Intelligent Day Types:** Seamlessly assign "Work", "Off", or "Holiday" statuses per day. The application and Excel generator recognize these statuses and format the cells appropriately (e.g., printing "Holiday" correctly in the time entry section).
+- **Fast Data Entry:** Includes a quick "Copy previous day's inputs" function for faster and more efficient encoding.
+- **Premium User Experience:** Features interactive date and time pickers, sticky floating action buttons, clear confirmation dialogs, and a dynamic footer reflecting the selected period.
+- **Dark/Light Mode:** Includes an integrated theme toggle with local storage persistence for comfortable viewing in any environment.
+- **Cross-Browser Compatibility:** Carefully optimized for consistent rendering across Google Chrome, Brave, and Mozilla Firefox browsers.
 
-## React Compiler
+## 🛠️ Technologies Used
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Framework & Language:** React 19, TypeScript, Vite
+- **Styling & Components:** Tailwind CSS v4, Shadcn UI, Radix UI
+- **Icons:** Lucide React, Hugeicons
+- **Forms & State Management:** React Hook Form
+- **Date Handling:** `date-fns`, `react-day-picker`
+- **Excel Generation:** ExcelJS
+- **Toast Notifications:** Sonner
+- **Theming:** `next-themes`
 
-## Expanding the ESLint configuration
+## 🚀 Getting Started
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Prerequisites
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+Ensure you have [Node.js](https://nodejs.org/) installed on your machine.
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+### Installation
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+1. Clone the repository and navigate into the project directory:
+   ```bash
+   cd dtr-generator-for-maclang
+   ```
+
+2. Install the necessary dependencies:
+   ```bash
+   npm install
+   ```
+
+### Running Locally
+
+Start the Vite development server with Hot Module Replacement (HMR):
+```bash
+npm run dev
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+Open your browser and navigate to `http://localhost:5173`.
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+### Building for Production
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+To create an optimized production build:
+```bash
+npm run build
 ```
+You can preview the built application locally using:
+```bash
+npm run preview
+```
+
+## 📄 Form Details
+
+This application automatically handles the strict requirements of the Civil Service form, ensuring consistent uppercase formatting for time entries, adhering to character limits, and aligning to the required document structure out of the box.
+
+---
+
+*This project was developed to modernize the DTR encoding operations and improve the workflow for Maclang Hospital's human resources and staff.*
