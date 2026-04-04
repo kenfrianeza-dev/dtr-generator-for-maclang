@@ -287,7 +287,7 @@ export default function App() {
 
   return (
     <TooltipProvider>
-    <div className="min-h-screen min-w-[485px] bg-slate-50 dark:bg-slate-950 p-4 md:p-8 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
+    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 p-4 md:p-8 text-slate-900 dark:text-slate-100 font-sans transition-colors duration-300">
       <Toaster position="top-right" richColors closeButton />
       <div className="max-w-6xl mx-auto space-y-6">
         
