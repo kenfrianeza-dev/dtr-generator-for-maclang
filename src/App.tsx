@@ -389,35 +389,37 @@ export default function App() {
               Allows horizontal scroll if viewport is too narrow.
               Also constrained vertical height for huge tables to keep table headers sticky! 
             */}
-            <div className="overflow-auto bg-white dark:bg-slate-900 border-b dark:border-slate-700 max-h-[600px] relative">
-              <Table className="min-w-[800px] w-full text-sm align-middle">
-                <TableHeader className="sticky top-0 z-10 bg-slate-100 dark:bg-slate-800 shadow-sm ring-1 ring-slate-200 dark:ring-slate-700">
-                  <TableRow className="border-slate-200 dark:border-slate-700 hover:bg-transparent">
-                    <TableHead rowSpan={2} className="w-16 text-center border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800">Day</TableHead>
-                    <TableHead rowSpan={2} className="w-24 text-center border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-slate-100 dark:bg-slate-800">Type</TableHead>
-                    <TableHead colSpan={2} className="text-center border-r dark:border-green-700 font-bold text-green-800 dark:text-green-200 bg-green-50 dark:bg-green-800/70">Morning</TableHead>
-                    <TableHead colSpan={2} className="text-center border-r dark:border-yellow-700 font-bold text-yellow-800 dark:text-yellow-200 bg-yellow-50 dark:bg-yellow-800/70">Afternoon</TableHead>
-                    <TableHead colSpan={2} className="text-center border-r dark:border-red-700 font-bold text-red-800 dark:text-red-200 bg-red-50 dark:bg-red-800/70">Overtime</TableHead>
-                    <TableHead rowSpan={2} className="w-20 text-center bg-slate-100 dark:bg-slate-800 border-l dark:border-slate-700">
+              <Table 
+                containerClassName="bg-white dark:bg-slate-900 border-b dark:border-slate-700 max-h-[600px]"
+                className="min-w-[800px] w-full text-sm align-middle border-separate border-spacing-0 [&_td]:border-b [&_td]:border-slate-200 dark:[&_td]:border-slate-700"
+              >
+                <TableHeader className="sticky top-0 z-20">
+                  <TableRow className="hover:bg-transparent">
+                    <TableHead rowSpan={2} className="w-16 text-center border border-slate-200 border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800/50 backdrop-blur-md">Day</TableHead>
+                    <TableHead rowSpan={2} className="w-24 text-center border border-slate-200 border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800/50 backdrop-blur-md">Type</TableHead>
+                    <TableHead colSpan={2} className="text-center border-green-200 border dark:border-green-700 font-bold text-green-800 dark:text-green-200 bg-green-50 dark:bg-green-900/50 backdrop-blur-md">Morning</TableHead>
+                    <TableHead colSpan={2} className="text-center  border-yellow-200 border dark:border-yellow-700 font-bold text-yellow-800 dark:text-yellow-200 bg-yellow-50 dark:bg-yellow-900/50 backdrop-blur-md">Afternoon</TableHead>
+                    <TableHead colSpan={2} className="text-center  border-red-200 border dark:border-red-700 font-bold text-red-800 dark:text-red-200 bg-red-50 dark:bg-red-900/50 backdrop-blur-md">Overtime</TableHead>
+                    <TableHead rowSpan={2} className="w-20 text-center border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 backdrop-blur-md">
                       <div className="flex justify-center items-center h-full">
                         <Settings2 className="w-4 h-4 text-slate-500" />
                       </div>
                     </TableHead>
                   </TableRow>
-                  <TableRow className="border-slate-200 dark:border-slate-700 hover:bg-transparent bg-slate-50 dark:bg-slate-800/70">
-                    <TableHead className="text-center border-r dark:border-slate-700 border-t text-slate-600 dark:text-slate-400 font-semibold w-24">Arrived</TableHead>
-                    <TableHead className="text-center border-r dark:border-slate-700 border-t text-slate-600 dark:text-slate-400 font-semibold w-24">Departure</TableHead>
-                    <TableHead className="text-center border-r dark:border-slate-700 border-t text-slate-600 dark:text-slate-400 font-semibold w-24">Arrived</TableHead>
-                    <TableHead className="text-center border-r dark:border-slate-700 border-t text-slate-600 dark:text-slate-400 font-semibold w-24">Departure</TableHead>
-                    <TableHead className="text-center border-r dark:border-slate-700 border-t text-slate-600 dark:text-slate-400 font-semibold w-24">Hours</TableHead>
-                    <TableHead className="text-center border-t text-slate-600 dark:text-slate-400 font-semibold w-24">Minutes</TableHead>
+                  <TableRow className="hover:bg-transparent dark:bg-slate-800/50">
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Arrived</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Departure</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Arrived</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Departure</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Hours</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Minutes</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
                   {groupedDates.map(group => (
                     <React.Fragment key={group.monthStr}>
-                      <TableRow className="bg-slate-100/50 dark:bg-slate-800/80 hover:bg-slate-100/50 dark:hover:bg-slate-800/80">
-                        <TableCell colSpan={9} className="font-semibold text-slate-700 dark:text-slate-300 py-3 px-4 border-y dark:border-slate-700 shadow-sm z-10 sticky top-0">
+                      <TableRow className="bg-white/50 dark:bg-slate-800/50 hover:bg-white/50 dark:hover:bg-slate-800/80">
+                        <TableCell colSpan={9} className="bg-white dark:bg-slate-800 font-semibold text-slate-700 dark:text-slate-300 py-3 px-4 border-b border-t-0 dark:border-slate-700 shadow-sm z-10 sticky top-[96px]">
                           {group.monthStr}
                         </TableCell>
                       </TableRow>
@@ -609,7 +611,6 @@ export default function App() {
                   ))}
                 </TableBody>
               </Table>
-            </div>
             
             <CardFooter className="bg-white dark:bg-slate-900 p-6 flex flex-col sm:flex-row gap-2 justify-between items-center text-sm text-slate-500 dark:text-slate-400">
               <p className="text-xs">Pro Tip: Use the <Copy className="inline w-3 h-3"/> icon on the right to quickly duplicate the previous row.</p>
