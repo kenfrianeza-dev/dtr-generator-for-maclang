@@ -399,13 +399,13 @@ export default function App() {
             <CardContent className="bg-white dark:bg-slate-900 px-6">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-2 md:col-span-2">
-                  <Label htmlFor="name" className={`font-medium ${errors.name ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}>Name <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="name" className={`text-xs font-medium ${errors.name ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}>Name <span className="text-red-500">*</span></Label>
                   <Input id="name" maxLength={30} placeholder="E.g. GREGORIO, STELLA JOY D." {...register("name", { required: "Name is required" })} className={`shadow dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 ${errors.name ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200 dark:border-slate-600"}`} />
                   {errors.name && <p className="text-xs text-red-500">{errors.name.message as string}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="leftPeriod" className="text-slate-700 dark:text-slate-300 font-medium"><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> DTR Period</Label>
+                  <Label htmlFor="leftPeriod" className="text-xs text-slate-700 dark:text-slate-300 font-medium"><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> DTR Period</Label>
                   <Controller
                     control={control}
                     name="leftPeriod"
@@ -419,7 +419,7 @@ export default function App() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="rightPeriod" className="text-slate-700 dark:text-slate-300 font-medium"><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> DTR Period</Label>
+                  <Label htmlFor="rightPeriod" className="text-xs text-slate-700 dark:text-slate-300 font-medium"><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> DTR Period</Label>
                   <Controller
                     control={control}
                     name="rightPeriod"
@@ -433,36 +433,36 @@ export default function App() {
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="leftOfficialHours" className={`font-medium ${errors.leftOfficialHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> Official Hours <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="leftOfficialHours" className={`text-xs font-medium ${errors.leftOfficialHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> Official Hours <span className="text-red-500">*</span></Label>
                   <Input id="leftOfficialHours" maxLength={CUSTOM_HOURS_CHARACTERS_LENGTH} placeholder="E.g. 8AM-5PM, 6AM-2PM..." {...register("leftOfficialHours", { required: "Left official hours are required" })} className={`shadow dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 ${errors.leftOfficialHours ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200 dark:border-slate-600"}`} />
                   {errors.leftOfficialHours && <p className="text-xs text-red-500">{errors.leftOfficialHours.message as string}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="rightOfficialHours" className={`font-medium ${errors.rightOfficialHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> Official Hours <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="rightOfficialHours" className={`text-xs font-medium ${errors.rightOfficialHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> Official Hours <span className="text-red-500">*</span></Label>
                   <Input id="rightOfficialHours" maxLength={CUSTOM_HOURS_CHARACTERS_LENGTH} placeholder="E.g. 8AM-5PM, 6AM-2PM..." {...register("rightOfficialHours", { required: "Right official hours are required" })} className={`shadow dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 ${errors.rightOfficialHours ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200 dark:border-slate-600"}`} />
                   {errors.rightOfficialHours && <p className="text-xs text-red-500">{errors.rightOfficialHours.message as string}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="leftRegularDaysHours" className={`font-medium ${errors.leftRegularDaysHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> Arrival & Departure (Regular Days) <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="leftRegularDaysHours" className={`text-xs font-medium ${errors.leftRegularDaysHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> Arrival & Departure (Regular Days) <span className="text-red-500">*</span></Label>
                   <Input id="leftRegularDaysHours" maxLength={CUSTOM_HOURS_CHARACTERS_LENGTH} placeholder="E.g. 8AM-5PM, 6AM-2PM..." {...register("leftRegularDaysHours", { required: "Left arrival & departure is required" })} className={`shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 ${errors.leftRegularDaysHours ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200 dark:border-slate-600"}`} />
                   {errors.leftRegularDaysHours && <p className="text-xs text-red-500">{errors.leftRegularDaysHours.message as string}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="rightRegularDaysHours" className={`font-medium ${errors.rightRegularDaysHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> Arrival & Departure (Regular Days) <span className="text-red-500">*</span></Label>
+                  <Label htmlFor="rightRegularDaysHours" className={`text-xs font-medium ${errors.rightRegularDaysHours ? "text-red-500 dark:text-red-500" : "text-slate-700 dark:text-slate-300"}`}><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> Arrival & Departure (Regular Days) <span className="text-red-500">*</span></Label>
                   <Input id="rightRegularDaysHours" maxLength={CUSTOM_HOURS_CHARACTERS_LENGTH} placeholder="E.g. 8AM-5PM, 6AM-2PM..." {...register("rightRegularDaysHours", { required: "Right arrival & departure is required" })} className={`shadow-sm dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500 ${errors.rightRegularDaysHours ? "border-red-500 focus-visible:ring-red-500" : "border-slate-200 dark:border-slate-600"}`} />
                   {errors.rightRegularDaysHours && <p className="text-xs text-red-500">{errors.rightRegularDaysHours.message as string}</p>}
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="leftSaturdaysHours" className="text-slate-700 dark:text-slate-300 font-medium"><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> Arrival & Departure (Saturdays)</Label>
+                  <Label htmlFor="leftSaturdaysHours" className="text-xs text-slate-700 dark:text-slate-300 font-medium"><span className="bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-green-200 dark:border-green-800/60">Left</span> Arrival & Departure (Saturdays)</Label>
                   <Input id="leftSaturdaysHours" maxLength={CUSTOM_HOURS_CHARACTERS_LENGTH} placeholder="E.g. 8AM-5PM, 6AM-2PM..." {...register("leftSaturdaysHours")} className="shadow-sm border-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500" />
                 </div>
                 
                 <div className="space-y-2">
-                  <Label htmlFor="rightSaturdaysHours" className="text-slate-700 dark:text-slate-300 font-medium"><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> Arrival & Departure (Saturdays)</Label>
+                  <Label htmlFor="rightSaturdaysHours" className="text-xs text-slate-700 dark:text-slate-300 font-medium"><span className="bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-400 px-2 py-0.5 rounded-md text-[8px] font-bold uppercase tracking-wider border border-yellow-200 dark:border-yellow-800/60">Right</span> Arrival & Departure (Saturdays)</Label>
                   <Input id="rightSaturdaysHours" maxLength={CUSTOM_HOURS_CHARACTERS_LENGTH} placeholder="E.g. 8AM-5PM, 6AM-2PM..." {...register("rightSaturdaysHours")} className="shadow-sm border-slate-200 dark:border-slate-600 dark:bg-slate-800 dark:text-slate-100 dark:placeholder-slate-500" />
                 </div>
                 
