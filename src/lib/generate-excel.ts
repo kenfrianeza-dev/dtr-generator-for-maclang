@@ -313,7 +313,7 @@ function writeDTRCopy(
       for (let ci = 1; ci <= 6; ci++) {
         const cell = ws.getCell(row, c(ci));
         cell.value = label;
-        cell.font = { ...defaultFont, bold: false, size: 8 };
+        cell.font = { ...defaultFont, bold: false, size: 9 };
         cell.alignment = { horizontal: "center", vertical: "middle" };
         cell.border = dataBorder(ci, isLastRow);
       }
