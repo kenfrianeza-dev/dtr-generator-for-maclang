@@ -313,6 +313,55 @@ export default function App() {
     });
   };
 
+  const renderTimeCell = (index: number, fieldName: "morningArrival" | "morningDeparture" | "afternoonArrival" | "afternoonDeparture", tabIndex: number, bgClass: string = "") => {
+    const isOff = daysValues?.[index]?.[fieldName] === "OFF";
+    return (
+      <TableCell className={`p-1 border-r dark:border-slate-700 ${bgClass}`}>
+        <div className="relative group w-full h-full flex items-center justify-center">
+          {isOff ? (
+            <div 
+              className="h-9 w-full min-w-24 flex items-center justify-center text-xs md:text-sm font-bold text-red-500 bg-red-50 dark:bg-red-900/20 border border-transparent rounded cursor-pointer transition-colors hover:border-red-300 dark:hover:border-red-700"
+              onClick={() => setValue(`days.${index}.${fieldName}`, "")}
+              title="Click to change back to time"
+            >
+              OFF
+            </div>
+          ) : (
+            <>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Input 
+                    type="time"
+                    title=" "
+                    {...register(`days.${index}.${fieldName}`)} 
+                    className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded pr-8"
+                    tabIndex={tabIndex}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Show time picker</p>
+                </TooltipContent>
+              </Tooltip>
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setValue(`days.${index}.${fieldName}`, "OFF");
+                }}
+                className="absolute right-2 top-1/2 -translate-y-1/2 text-[9px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/60 dark:hover:text-red-400 transition-all z-10 cursor-pointer shadow-sm"
+                title="Set as OFF"
+              >
+                OFF
+              </button>
+            </>
+          )}
+        </div>
+      </TableCell>
+    );
+  };
+
   const CUSTOM_HOURS_CHARACTERS_LENGTH = 72;
 
   return (
@@ -541,71 +590,10 @@ export default function App() {
                               </TableCell>
                             ) : (
                               <>
-                                <TableCell className="p-1 border-r dark:border-slate-700">
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Input 
-                                        type="time"
-                                        title=" "
-                                        {...register(`days.${index}.morningArrival`)} 
-                                        className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded"
-                                        tabIndex={chronIndex * 6 + 1}
-                                      />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Show time picker</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TableCell>
-                                <TableCell className="p-1 border-r dark:border-slate-700 bg-slate-50/30 dark:bg-slate-800/20">
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Input 
-                                        type="time"
-                                        title=" "
-                                        {...register(`days.${index}.morningDeparture`)} 
-                                        className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded"
-                                        tabIndex={chronIndex * 6 + 2}
-                                      />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Show time picker</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TableCell>
-                                
-                                <TableCell className="p-1 border-r dark:border-slate-700">
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Input 
-                                        type="time"
-                                        title=" "
-                                        {...register(`days.${index}.afternoonArrival`)} 
-                                        className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded"
-                                        tabIndex={chronIndex * 6 + 3}
-                                      />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Show time picker</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TableCell>
-                                <TableCell className="p-1 border-r dark:border-slate-700 bg-slate-50/30 dark:bg-slate-800/20">
-                                  <Tooltip>
-                                    <TooltipTrigger asChild>
-                                      <Input 
-                                        type="time"
-                                        title=" "
-                                        {...register(`days.${index}.afternoonDeparture`)} 
-                                        className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded"
-                                        tabIndex={chronIndex * 6 + 4}
-                                      />
-                                    </TooltipTrigger>
-                                    <TooltipContent>
-                                      <p>Show time picker</p>
-                                    </TooltipContent>
-                                  </Tooltip>
-                                </TableCell>
+                                {renderTimeCell(index, "morningArrival", chronIndex * 6 + 1)}
+                                {renderTimeCell(index, "morningDeparture", chronIndex * 6 + 2, "bg-slate-50/30 dark:bg-slate-800/20")}
+                                {renderTimeCell(index, "afternoonArrival", chronIndex * 6 + 3)}
+                                {renderTimeCell(index, "afternoonDeparture", chronIndex * 6 + 4, "bg-slate-50/30 dark:bg-slate-800/20")}
                                 
                                 <TableCell className="p-1 border-r dark:border-slate-700">
                                   <Input 
