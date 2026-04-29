@@ -1,5 +1,5 @@
-import React, { useMemo, useEffect, useState } from "react";
-import { useForm, useFieldArray, Controller } from "react-hook-form";
+import React, { useMemo, useEffect, useState, memo } from "react";
+import { useForm, useFieldArray, Controller, useWatch } from "react-hook-form";
 import { format, isWeekend, eachDayOfInterval } from "date-fns";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -38,6 +38,191 @@ import { Copy, FileDown, Sun, Moon, RotateCcw, Eraser, Settings2, ArrowRight, Ar
 import { generateDTRExcel, type DTRFormData } from "@/lib/generate-excel";
 
 const LOCAL_STORAGE_KEY = "dtr-form-data";
+
+const DTRTableRow = memo(({ 
+  index, 
+  date, 
+  chronIndex, 
+  control, 
+  register, 
+  setValue, 
+  copyPreviousDay, 
+  resetDay, 
+  setDayType 
+}: {
+  index: number;
+  date: Date;
+  chronIndex: number;
+  control: any;
+  register: any;
+  setValue: any;
+  copyPreviousDay: (i: number) => void;
+  resetDay: (i: number) => void;
+  setDayType: (i: number, t: "work" | "off" | "holiday") => void;
+}) => {
+  const rowData = useWatch({
+    control,
+    name: `days.${index}`
+  });
+  
+  const rawType = rowData?.dayType;
+  const isDayOff = rawType === "off" || rowData?.dayOff === true;
+  const isHoliday = rawType === "holiday";
+  const isNonWork = isDayOff || isHoliday;
+  
+  const isWknd = isWeekend(date);
+  const dayName = format(date, 'EEE');
+  const currentDayStr = `${date.getDate()}`;
+
+  const renderTimeCell = (fieldName: string, tabIndex: number, bgClass: string = "") => {
+    const isOff = (rowData as any)?.[fieldName] === "OFF";
+    return (
+      <TableCell className={`p-1 border-r dark:border-slate-700 ${bgClass}`}>
+        <div className="relative group w-full h-full flex items-center justify-center">
+          {isOff ? (
+            <div 
+              className="h-9 w-full min-w-24 flex items-center justify-center text-xs md:text-sm font-bold text-red-500 bg-red-50 dark:bg-red-900/20 border border-transparent rounded cursor-pointer transition-colors hover:border-red-300 dark:hover:border-red-700"
+              onClick={() => setValue(`days.${index}.${fieldName}`, "")}
+              title="Click to change back to time"
+            >
+              OFF
+            </div>
+          ) : (
+            <>
+              <Input 
+                type="time"
+                title=" "
+                {...register(`days.${index}.${fieldName}`)} 
+                className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded pr-8"
+                tabIndex={tabIndex}
+              />
+              <button
+                type="button"
+                tabIndex={-1}
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setValue(`days.${index}.${fieldName}`, "OFF");
+                }}
+                className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/60 dark:hover:text-red-400 transition-all z-0 cursor-pointer shadow-sm"
+                title="Set as OFF"
+              >
+                OFF
+              </button>
+            </>
+          )}
+        </div>
+      </TableCell>
+    );
+  };
+
+  return (
+    <TableRow 
+      className={`
+        border-slate-200 dark:border-slate-700 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50
+        ${isDayOff ? 'bg-red-50/40 dark:bg-red-950/30' : ''}
+        ${isHoliday ? 'bg-indigo-50/40 dark:bg-indigo-950/30' : ''}
+        ${isWknd && !isNonWork ? 'bg-amber-50/40 dark:bg-amber-950/20' : ''}
+      `}
+    >
+      <TableCell className="sticky left-0 z-10 font-medium text-center border-r dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md py-2 min-h-[3.5rem] shadow-[1px_0_0_0_transparent]">
+        <div className="flex flex-col items-center justify-center">
+          <span className={`text-base leading-none ${isDayOff ? 'text-red-400 dark:text-red-500' : isHoliday ? 'text-green-700 dark:text-green-400' : isWknd ? 'text-amber-700 dark:text-amber-400' : 'text-slate-800 dark:text-slate-200'}`}>{currentDayStr}</span>
+          {dayName && <span className={`text-[10px] sm:text-xs mt-1 font-semibold tracking-widest uppercase ${isDayOff ? 'text-red-400 dark:text-red-500' : isHoliday ? 'text-green-600 dark:text-green-400' : isWknd ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'}`}>{dayName}</span>}
+        </div>
+      </TableCell>
+
+      <TableCell className="p-1 border-r dark:border-slate-700 text-center">
+        <div className="flex items-center justify-center">
+          <Select
+            value={rawType || (rowData?.dayOff ? "off" : "work")}
+            onValueChange={(value) => setDayType(index, value as "work" | "off" | "holiday")}
+          >
+            <SelectTrigger className="h-8 w-full px-2 text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 transition-all rounded outline-none focus:ring-1 focus:ring-blue-500 hover:border-slate-300 dark:hover:border-slate-600 flex items-center justify-between font-medium">
+              <SelectValue placeholder="Type" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="work">Work</SelectItem>
+              <SelectItem value="off">Off</SelectItem>
+              <SelectItem value="holiday">Holiday</SelectItem>
+            </SelectContent>
+          </Select>
+        </div>
+      </TableCell>
+      
+      {isNonWork ? (
+        <TableCell colSpan={6} className="p-1 border-r dark:border-slate-700 text-center">
+          <div className="h-9 flex items-center justify-center">
+            <span className={`text-sm font-bold tracking-widest ${isHoliday ? 'text-green-500 dark:text-green-500' : 'text-red-500 dark:text-red-500'} uppercase select-none`}>{isHoliday ? 'HOLIDAY' : 'OFF'}</span>
+          </div>
+        </TableCell>
+      ) : (
+        <>
+          {renderTimeCell("morningArrival", chronIndex * 6 + 1)}
+          {renderTimeCell("morningDeparture", chronIndex * 6 + 2, "bg-slate-50/30 dark:bg-slate-800/20")}
+          {renderTimeCell("afternoonArrival", chronIndex * 6 + 3)}
+          {renderTimeCell("afternoonDeparture", chronIndex * 6 + 4, "bg-slate-50/30 dark:bg-slate-800/20")}
+          
+          <TableCell className="p-1 border-r dark:border-slate-700">
+            <Input 
+              {...register(`days.${index}.overtimeHours`)} 
+              placeholder="..."
+              maxLength={9} 
+              className="h-9 w-full min-w-20 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 transition-all rounded text-slate-500 dark:text-slate-400"
+              tabIndex={chronIndex * 6 + 5}
+            />
+          </TableCell>
+          <TableCell className="p-1 border-r dark:border-slate-700">
+             <Input 
+              {...register(`days.${index}.overtimeMinutes`)} 
+              placeholder="E.g. 8AM-5PM"
+              maxLength={9}
+              className="h-9 w-full min-w-16 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 transition-all rounded text-slate-500 dark:text-slate-400"
+              tabIndex={chronIndex * 6 + 6}
+            />
+          </TableCell>
+        </>
+      )}
+      
+      <TableCell className="p-1">
+        <div className="flex items-center justify-center gap-1 h-full">
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                type="button"
+                variant="ghost" 
+                size="icon" 
+                className={`h-8 w-8 shrink-0 text-gray-400/75 dark:text-gray-400/75 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 ${chronIndex === 0 ? 'invisible' : ''}`}
+                onClick={() => copyPreviousDay(chronIndex)}
+              >
+                <Copy className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Copy previous day's inputs</p>
+            </TooltipContent>
+          </Tooltip>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Button 
+                type="button"
+                variant="ghost" 
+                size="icon" 
+                className="h-8 w-8 shrink-0 text-gray-400/75 dark:text-gray-400/75 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50"
+                onClick={() => resetDay(index)}
+              >
+                <Eraser className="h-4 w-4" />
+              </Button>
+            </TooltipTrigger>
+            <TooltipContent>
+              <p>Reset this row</p>
+            </TooltipContent>
+          </Tooltip>
+        </div>
+      </TableCell>
+    </TableRow>
+  );
+});
 
 const getInitialFormValues = (): DTRFormData => {
   const currentMonthDate = new Date();
@@ -112,14 +297,13 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const { fields } = useFieldArray({
+  const { append, remove, replace } = useFieldArray({
     control,
     name: "days",
   });
 
   const leftPeriodValue = watch("leftPeriod");
   const rightPeriodValue = watch("rightPeriod");
-  const daysValues = watch("days");
 
   const [emptyWarnOpen, setEmptyWarnOpen] = useState(false);
   const [pendingData, setPendingData] = useState<DTRFormData | null>(null);
@@ -313,55 +497,6 @@ export default function App() {
     });
   };
 
-  const renderTimeCell = (index: number, fieldName: "morningArrival" | "morningDeparture" | "afternoonArrival" | "afternoonDeparture", tabIndex: number, bgClass: string = "") => {
-    const isOff = daysValues?.[index]?.[fieldName] === "OFF";
-    return (
-      <TableCell className={`p-1 border-r dark:border-slate-700 ${bgClass}`}>
-        <div className="relative group w-full h-full flex items-center justify-center">
-          {isOff ? (
-            <div 
-              className="h-9 w-full min-w-24 flex items-center justify-center text-xs md:text-sm font-bold text-red-500 bg-red-50 dark:bg-red-900/20 border border-transparent rounded cursor-pointer transition-colors hover:border-red-300 dark:hover:border-red-700"
-              onClick={() => setValue(`days.${index}.${fieldName}`, "")}
-              title="Click to change back to time"
-            >
-              OFF
-            </div>
-          ) : (
-            <>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <Input 
-                    type="time"
-                    title=" "
-                    {...register(`days.${index}.${fieldName}`)} 
-                    className="h-9 w-full min-w-24 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 dark:text-slate-200 transition-all rounded pr-8"
-                    tabIndex={tabIndex}
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <p>Show time picker</p>
-                </TooltipContent>
-              </Tooltip>
-              <button
-                type="button"
-                tabIndex={-1}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setValue(`days.${index}.${fieldName}`, "OFF");
-                }}
-                className="absolute right-1 top-1/2 -translate-y-1/2 text-[9px] font-bold bg-slate-200 dark:bg-slate-700 text-slate-600 dark:text-slate-300 px-1.5 py-0.5 rounded opacity-100 md:opacity-0 md:group-hover:opacity-100 hover:bg-red-100 hover:text-red-600 dark:hover:bg-red-900/60 dark:hover:text-red-400 transition-all z-0 cursor-pointer shadow-sm"
-                title="Set as OFF"
-              >
-                OFF
-              </button>
-            </>
-          )}
-        </div>
-      </TableCell>
-    );
-  };
-
   const CUSTOM_HOURS_CHARACTERS_LENGTH = 72;
 
   return (
@@ -532,129 +667,20 @@ export default function App() {
                           </div>
                         </TableCell>
                       </TableRow>
-                      {group.dates.map(({ date, chronIndex }) => {
-                        const index = date.getDate() - 1;
-                        const field = fields[index];
-                        if (!field) return null;
-
-                        const currentDayStr = `${date.getDate()}`;
-                        const rawType = daysValues?.[index]?.dayType;
-                        const isDayOff = rawType === "off" || daysValues?.[index]?.dayOff === true;
-                        const isHoliday = rawType === "holiday";
-                        const isNonWork = isDayOff || isHoliday;
-                        
-                        const isWknd = isWeekend(date);
-                        const dayName = format(date, 'EEE');
-
-                        return (
-                          <TableRow 
-                            key={`date-${format(date, 'yyyy-MM-dd')}`} 
-                            className={`
-                              border-slate-200 dark:border-slate-700 transition-colors hover:bg-slate-50 dark:hover:bg-slate-800/50
-                              ${isDayOff ? 'bg-red-50/40 dark:bg-red-950/30' : ''}
-                              ${isHoliday ? 'bg-indigo-50/40 dark:bg-indigo-950/30' : ''}
-                              ${isWknd && !isNonWork ? 'bg-amber-50/40 dark:bg-amber-950/20' : ''}
-                            `}
-                          >
-                            <TableCell className="sticky left-0 z-10 font-medium text-center border-r dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md py-2 min-h-[3.5rem] shadow-[1px_0_0_0_transparent]">
-                              <div className="flex flex-col items-center justify-center">
-                                <span className={`text-base leading-none ${isDayOff ? 'text-red-400 dark:text-red-500' : isHoliday ? 'text-green-700 dark:text-green-400' : isWknd ? 'text-amber-700 dark:text-amber-400' : 'text-slate-800 dark:text-slate-200'}`}>{currentDayStr}</span>
-                                {dayName && <span className={`text-[10px] sm:text-xs mt-1 font-semibold tracking-widest uppercase ${isDayOff ? 'text-red-400 dark:text-red-500' : isHoliday ? 'text-green-600 dark:text-green-400' : isWknd ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'}`}>{dayName}</span>}
-                              </div>
-                            </TableCell>
-
-                            {/* Dropdown for Type */}
-                            <TableCell className="p-1 border-r dark:border-slate-700 text-center">
-                              <div className="flex items-center justify-center">
-                                <Select
-                                  value={rawType || (daysValues?.[index]?.dayOff ? "off" : "work")}
-                                  onValueChange={(value) => setDayType(index, value as "work" | "off" | "holiday")}
-                                >
-                                  <SelectTrigger className="h-8 w-full px-2 text-xs border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 text-slate-800 dark:text-slate-200 transition-all rounded outline-none focus:ring-1 focus:ring-blue-500 hover:border-slate-300 dark:hover:border-slate-600 flex items-center justify-between font-medium">
-                                    <SelectValue placeholder="Type" />
-                                  </SelectTrigger>
-                                  <SelectContent>
-                                    <SelectItem value="work">Work</SelectItem>
-                                    <SelectItem value="off">Off</SelectItem>
-                                    <SelectItem value="holiday">Holiday</SelectItem>
-                                  </SelectContent>
-                                </Select>
-                              </div>
-                            </TableCell>
-                            
-                            {isNonWork ? (
-                              <TableCell colSpan={6} className="p-1 border-r dark:border-slate-700 text-center">
-                                <div className="h-9 flex items-center justify-center">
-                                  <span className={`text-sm font-bold tracking-widest ${isHoliday ? 'text-green-500 dark:text-green-500' : 'text-red-500 dark:text-red-500'} uppercase select-none`}>{isHoliday ? 'HOLIDAY' : 'OFF'}</span>
-                                </div>
-                              </TableCell>
-                            ) : (
-                              <>
-                                {renderTimeCell(index, "morningArrival", chronIndex * 6 + 1)}
-                                {renderTimeCell(index, "morningDeparture", chronIndex * 6 + 2, "bg-slate-50/30 dark:bg-slate-800/20")}
-                                {renderTimeCell(index, "afternoonArrival", chronIndex * 6 + 3)}
-                                {renderTimeCell(index, "afternoonDeparture", chronIndex * 6 + 4, "bg-slate-50/30 dark:bg-slate-800/20")}
-                                
-                                <TableCell className="p-1 border-r dark:border-slate-700">
-                                  <Input 
-                                    {...register(`days.${index}.overtimeHours`)} 
-                                    placeholder="..."
-                                    maxLength={9} 
-                                    className="h-9 w-full min-w-20 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 transition-all rounded text-slate-500 dark:text-slate-400"
-                                    tabIndex={chronIndex * 6 + 5}
-                                  />
-                                </TableCell>
-                                <TableCell className="p-1 border-r dark:border-slate-700">
-                                   <Input 
-                                    {...register(`days.${index}.overtimeMinutes`)} 
-                                    placeholder="E.g. 8AM-5PM"
-                                    maxLength={9}
-                                    className="h-9 w-full min-w-16 px-2 text-xs md:text-sm text-center border-transparent hover:border-slate-300 dark:hover:border-slate-600 focus:border-blue-500 shadow-none bg-transparent focus:bg-white dark:focus:bg-slate-800 transition-all rounded text-slate-500 dark:text-slate-400"
-                                    tabIndex={chronIndex * 6 + 6}
-                                  />
-                                </TableCell>
-                              </>
-                            )}
-                            
-                            <TableCell className="p-1">
-                              <div className="flex items-center justify-center gap-1 h-full">
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button 
-                                      type="button"
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className={`h-8 w-8 shrink-0 text-gray-400/75 dark:text-gray-400/75 hover:text-blue-600 dark:hover:text-blue-400 hover:bg-blue-50 dark:hover:bg-blue-950/50 ${chronIndex === 0 ? 'invisible' : ''}`}
-                                      onClick={() => copyPreviousDay(chronIndex)}
-                                    >
-                                      <Copy className="h-4 w-4" />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Copy previous day's inputs</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                                <Tooltip>
-                                  <TooltipTrigger asChild>
-                                    <Button 
-                                      type="button"
-                                      variant="ghost" 
-                                      size="icon" 
-                                      className="h-8 w-8 shrink-0 text-gray-400/75 dark:text-gray-400/75 hover:text-red-600 dark:hover:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/50"
-                                      onClick={() => resetDay(index)}
-                                    >
-                                      <Eraser className="h-4 w-4" />
-                                    </Button>
-                                  </TooltipTrigger>
-                                  <TooltipContent>
-                                    <p>Reset this row</p>
-                                  </TooltipContent>
-                                </Tooltip>
-                              </div>
-                            </TableCell>
-                          </TableRow>
-                        )
-                      })}
+                      {group.dates.map(({ date, chronIndex }) => (
+                        <DTRTableRow 
+                          key={`date-${format(date, 'yyyy-MM-dd')}`}
+                          index={date.getDate() - 1}
+                          date={date}
+                          chronIndex={chronIndex}
+                          control={control}
+                          register={register}
+                          setValue={setValue}
+                          copyPreviousDay={copyPreviousDay}
+                          resetDay={resetDay}
+                          setDayType={setDayType}
+                        />
+                      ))}
                     </React.Fragment>
                   ))}
                 </TableBody>
