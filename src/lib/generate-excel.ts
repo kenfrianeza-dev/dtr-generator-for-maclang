@@ -17,9 +17,12 @@ export interface DTRFormData {
   name: string;
   leftPeriod: { from: Date | undefined; to?: Date | undefined } | null;
   rightPeriod: { from: Date | undefined; to?: Date | undefined } | null;
-  officialHours: string;
-  regularDaysHours: string;
-  saturdaysHours: string;
+  leftOfficialHours: string;
+  rightOfficialHours: string;
+  leftRegularDaysHours: string;
+  rightRegularDaysHours: string;
+  leftSaturdaysHours: string;
+  rightSaturdaysHours: string;
   days: DTRDayData[];
 }
 
@@ -55,7 +58,10 @@ function writeDTRCopy(
   data: DTRFormData,
   baseDate: Date,
   periodString: string,
-  periodObj: { from?: Date; to?: Date } | null
+  periodObj: { from?: Date; to?: Date } | null,
+  officialHours: string,
+  regularDaysHours: string,
+  saturdaysHours: string
 ) {
   const daysInMonth = getDaysInMonth(baseDate);
   const c = (offset: number) => startCol + offset;
@@ -91,53 +97,63 @@ function writeDTRCopy(
   nameLabel.font = { ...defaultFont, size: 9, bold: true };
   nameLabel.alignment = { horizontal: "center" };
 
-  let INFO_LABEL_FONT_SIZE = 8;
   // ── Row 8: "For the Month of:" + period ──
   ws.mergeCells(8, c(0), 8, c(2));
   const monthLabel = ws.getCell(8, c(0));
   monthLabel.value = "For the Month of:";
-  monthLabel.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE };
+  monthLabel.font = { ...defaultFont, size: 8 };
 
   ws.mergeCells(8, c(3), 8, c(6));
   const monthValue = ws.getCell(8, c(3));
   monthValue.value = periodString;
-  monthValue.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE, bold: false, underline: false };
+  monthValue.font = { ...defaultFont, size: 8, bold: false, underline: false };
   monthValue.border = { bottom: { style: "thin" } };
 
   // ── Row 9: "Official Hours:" ──
   ws.mergeCells(9, c(0), 9, c(2));
   const ohLabel = ws.getCell(9, c(0));
   ohLabel.value = "Official Hours:";
-  ohLabel.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE, italic: false };
+  ohLabel.font = { ...defaultFont, size: 8, italic: false };
 
   ws.mergeCells(9, c(3), 9, c(6));
   const ohValue = ws.getCell(9, c(3));
-  ohValue.value = data.officialHours ? data.officialHours.toUpperCase() : "";
-  ohValue.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE, bold: false };
+  const ohLength = officialHours ? officialHours.length : 0;
+  ohValue.value = officialHours ? officialHours.toUpperCase() : "";
+  ohValue.font = { ...defaultFont, size: ohLength >= 38 ? 6 : 8, bold: false };
+  if (ohLength >= 38) {
+    ohValue.alignment = { wrapText: true, vertical: "middle" };
+  }
   ohValue.border = { bottom: { style: "thin" } };
 
   // ── Row 10: "For Arrival & Departure Regular D." ──
   ws.mergeCells(10, c(0), 10, c(3));
   const adLabel = ws.getCell(10, c(0));
   adLabel.value = "For Arrival & Departure Regular Days.";
-  adLabel.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE, italic: false };
+  adLabel.font = { ...defaultFont, size: 8, italic: false };
 
   ws.mergeCells(10, c(4), 10, c(6));
   const adValue = ws.getCell(10, c(4));
-  adValue.value = data.regularDaysHours ? data.regularDaysHours.toUpperCase() : "";
-  adValue.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE, bold: false };
+  const adLength = regularDaysHours ? regularDaysHours.length : 0;
+  adValue.value = regularDaysHours ? regularDaysHours.toUpperCase() : "";
+  adValue.font = { ...defaultFont, size: adLength >= 38 ? 6 : 8, bold: false };
+  if (adLength >= 38) {
+    adValue.alignment = { wrapText: true, vertical: "middle" };
+  }
   adValue.border = { bottom: { style: "thin" } };
 
   // ── Row 11: "Saturdays:" ──
-  // ws.mergeCells(11, c(2), 11, c(3));
   const satLabel = ws.getCell(11, c(3));
   satLabel.value = "Saturdays:";
-  satLabel.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE, italic: false };
+  satLabel.font = { ...defaultFont, size: 8, italic: false };
 
   ws.mergeCells(11, c(4), 11, c(6));
   const satValue = ws.getCell(11, c(4));
-  satValue.value = data.saturdaysHours ? data.saturdaysHours.toUpperCase() : "";
-  satValue.font = { ...defaultFont, size: INFO_LABEL_FONT_SIZE };
+  const satLength = saturdaysHours ? saturdaysHours.length : 0;
+  satValue.value = saturdaysHours ? saturdaysHours.toUpperCase() : "";
+  satValue.font = { ...defaultFont, size: satLength >= 38 ? 6 : 8 };
+  if (satLength >= 38) {
+    satValue.alignment = { wrapText: true, vertical: "middle" };
+  }
   satValue.border = { bottom: { style: "thin" } };
 
   // ══════════════════════════════════════════════════
@@ -426,8 +442,8 @@ export async function generateDTRExcel(data: DTRFormData): Promise<void> {
   ws.getRow(48).height = 16;
 
   // Write the two identical DTR copies
-  writeDTRCopy(ws, 1, data, leftBase, leftPeriodStr, data.leftPeriod);   // Left  (A–G)
-  writeDTRCopy(ws, 9, data, rightBase, rightPeriodStr, data.rightPeriod);   // Right (I–O)
+  writeDTRCopy(ws, 1, data, leftBase, leftPeriodStr, data.leftPeriod, data.leftOfficialHours, data.leftRegularDaysHours, data.leftSaturdaysHours);   // Left  (A–G)
+  writeDTRCopy(ws, 9, data, rightBase, rightPeriodStr, data.rightPeriod, data.rightOfficialHours, data.rightRegularDaysHours, data.rightSaturdaysHours);   // Right (I–O)
 
   // ── Employee Signature (1 signature, centered at bottom) ──
   ws.mergeCells(53, 5, 53, 11);
@@ -488,20 +504,20 @@ export async function generateDTRExcel(data: DTRFormData): Promise<void> {
       if (isInsidePrintArea) {
         const currentBorder = cell.border ? { ...cell.border } : {};
 
-        // Add faint gridlines for any side that doesn't already have a custom border
-        if (!currentBorder.top) currentBorder.top = { style: "thin", color: { argb: "FFD4D4D4" } };
-        if (!currentBorder.left) currentBorder.left = { style: "thin", color: { argb: "FFD4D4D4" } };
-        if (!currentBorder.right) currentBorder.right = { style: "thin", color: { argb: "FFD4D4D4" } };
-        if (!currentBorder.bottom) currentBorder.bottom = { style: "thin", color: { argb: "FFD4D4D4" } };
+        // Add faint gridlines for any side that doesn't already have a custom border (FFD4D4D4 = Gray lines)
+        // if (!currentBorder.top) currentBorder.top = { style: "thin", color: { argb: "FFD4D4D4" } };
+        // if (!currentBorder.left) currentBorder.left = { style: "thin", color: { argb: "FFD4D4D4" } };
+        // if (!currentBorder.right) currentBorder.right = { style: "thin", color: { argb: "FFD4D4D4" } };
+        // if (!currentBorder.bottom) currentBorder.bottom = { style: "thin", color: { argb: "FFD4D4D4" } };
 
-        // Col 15 (O) -> Right side blue border (overrides the faint right gridline)
-        if (c === 15) {
-          currentBorder.right = { style: "thick", color: { argb: "FF0000D0" } };
-        }
+        // Col 15 (O) -> Right side blue border (overrides the faint right gridline) (FF0000D0 = Blue)
+        // if (c === 15) {
+        //   currentBorder.right = { style: "thick", color: { argb: "FF0000D0" } };
+        // }
         // Row 60 -> Bottom blue border (overrides the faint bottom gridline)
-        if (r === 60) {
-          currentBorder.bottom = { style: "thick", color: { argb: "FF0000D0" } };
-        }
+        // if (r === 60) {
+        //   currentBorder.bottom = { style: "thick", color: { argb: "FF0000D0" } };
+        // }
 
         cell.border = currentBorder;
       }
