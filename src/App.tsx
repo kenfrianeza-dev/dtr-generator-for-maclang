@@ -125,7 +125,7 @@ const DTRTableRow = memo(({
         ${isWknd && !isNonWork ? 'bg-amber-50/40 dark:bg-amber-950/20' : ''}
       `}
     >
-      <TableCell className="sticky left-0 z-10 font-medium text-center border-r dark:border-slate-700 bg-white/95 dark:bg-slate-900/95 backdrop-blur-md py-2 min-h-[3.5rem] shadow-[1px_0_0_0_transparent]">
+      <TableCell className="sticky left-0 z-10 font-medium text-center border-r dark:border-slate-700 bg-white dark:bg-slate-900 py-2 min-h-14 shadow-[1px_0_0_0_transparent]">
         <div className="flex flex-col items-center justify-center">
           <span className={`text-base leading-none ${isDayOff ? 'text-red-400 dark:text-red-500' : isHoliday ? 'text-green-700 dark:text-green-400' : isWknd ? 'text-amber-700 dark:text-amber-400' : 'text-slate-800 dark:text-slate-200'}`}>{currentDayStr}</span>
           {dayName && <span className={`text-[10px] sm:text-xs mt-1 font-semibold tracking-widest uppercase ${isDayOff ? 'text-red-400 dark:text-red-500' : isHoliday ? 'text-green-600 dark:text-green-400' : isWknd ? 'text-amber-600 dark:text-amber-400' : 'text-slate-400 dark:text-slate-500'}`}>{dayName}</span>}
@@ -297,7 +297,7 @@ export default function App() {
     return () => subscription.unsubscribe();
   }, [watch]);
 
-  const { append, remove, replace } = useFieldArray({
+  useFieldArray({
     control,
     name: "days",
   });
@@ -637,24 +637,24 @@ export default function App() {
               >
                 <TableHeader className="sticky top-0 z-20">
                   <TableRow className="hover:bg-transparent">
-                    <TableHead rowSpan={2} className="w-16 sticky left-0 z-30 text-center border border-slate-200 border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800 backdrop-blur-md">Day</TableHead>
-                    <TableHead rowSpan={2} className="w-24 text-center border border-slate-200 border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800/50 backdrop-blur-md">Type</TableHead>
-                    <TableHead colSpan={2} className="text-center border-green-200 border dark:border-green-700 font-bold text-green-800 dark:text-green-200 bg-green-50 dark:bg-green-900/50 backdrop-blur-md">Morning</TableHead>
-                    <TableHead colSpan={2} className="text-center  border-yellow-200 border dark:border-yellow-700 font-bold text-yellow-800 dark:text-yellow-200 bg-yellow-50 dark:bg-yellow-900/50 backdrop-blur-md">Afternoon</TableHead>
-                    <TableHead colSpan={2} className="text-center  border-red-200 border dark:border-red-700 font-bold text-red-800 dark:text-red-200 bg-red-50 dark:bg-red-900/50 backdrop-blur-md">Overtime</TableHead>
-                    <TableHead rowSpan={2} className="w-20 text-center border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800/50 backdrop-blur-md">
+                    <TableHead rowSpan={2} className="w-16 sticky left-0 z-30 text-center border border-slate-200 border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800">Day</TableHead>
+                    <TableHead rowSpan={2} className="w-24 text-center border border-slate-200 border-r dark:border-slate-700 font-bold text-slate-800 dark:text-slate-200 bg-white dark:bg-slate-800">Type</TableHead>
+                    <TableHead colSpan={2} className="text-center border-green-200 border dark:border-green-700 font-bold text-green-800 dark:text-green-200 bg-green-50 dark:bg-green-900">Morning</TableHead>
+                    <TableHead colSpan={2} className="text-center  border-yellow-200 border dark:border-yellow-700 font-bold text-yellow-800 dark:text-yellow-200 bg-yellow-50 dark:bg-yellow-900">Afternoon</TableHead>
+                    <TableHead colSpan={2} className="text-center  border-red-200 border dark:border-red-700 font-bold text-red-800 dark:text-red-200 bg-red-50 dark:bg-red-900">Overtime</TableHead>
+                    <TableHead rowSpan={2} className="w-20 text-center border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800">
                       <div className="flex justify-center items-center h-full">
                         <Settings2 className="w-4 h-4 text-slate-500" />
                       </div>
                     </TableHead>
                   </TableRow>
                   <TableRow className="hover:bg-transparent dark:bg-slate-800/50">
-                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Arrived</TableHead>
-                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Departure</TableHead>
-                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Arrived</TableHead>
-                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Departure</TableHead>
-                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Hours</TableHead>
-                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800/50 backdrop-blur-md">Minutes</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800">Arrived</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800">Departure</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800">Arrived</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800">Departure</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800">Hours</TableHead>
+                    <TableHead className="text-center border-b border-slate-200 border-r dark:border-slate-700 text-slate-600 dark:text-slate-400 font-semibold w-24 bg-white dark:bg-slate-800">Minutes</TableHead>
                   </TableRow>
                 </TableHeader>
                 <TableBody>
