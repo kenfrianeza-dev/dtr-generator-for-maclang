@@ -693,7 +693,8 @@ export default function App() {
           </Card>
           
         </form>
-
+        
+        {/* Footer Section */}
         <footer className="pt-10 text-center border-t border-slate-200 dark:border-slate-800">
           <p className="text-sm text-slate-500 dark:text-slate-400">
             &copy; {new Date().getFullYear()} Made by <a href="https://github.com/kenfrianeza-dev" target="_blank" rel="noopener noreferrer" className="hover:text-blue-600 dark:hover:text-blue-400 font-semibold transition-all underline">Ken Frianeza</a>
